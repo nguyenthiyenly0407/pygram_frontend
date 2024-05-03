@@ -1,0 +1,35 @@
+.rightContainerStyle {
+    padding: 20px;
+    margin-bottom: 20px;
+    height: auto;
+    display: flex;
+    justify-content: center; /* Canh giữa các phần tử con */
+  }
+  
+  /* Điều chỉnh kích thước của Calendar */
+  .react-calendar {
+    max-width: 250px; /* Điều chỉnh chiều rộng tối đa */
+    max-height: 250px; /* Điều chỉnh chiều cao tối đa */
+    border-radius: 6px; /* Bo góc */
+  }
+  .react-calendar__tile {
+    /* Thêm các thuộc tính CSS tùy chỉnh nếu cần */
+    font-size: 12px; /* Đặt kích thước font chữ */
+    padding: 3px; /* Đặt khoảng cách giữa các ô trong calendar */
+  }
+  
+  .react-calendar__tile--active {
+    /* Thêm các quy tắc CSS cho các ô được chọn trong calendar */
+    background-color: #3399FF; /* Màu nền cho các ô được chọn */
+    color: #FFFFFF; /* Màu chữ cho các ô được chọn */
+  }
+  
+  .react-calendar__tile--now {
+    /* Thêm các quy tắc CSS cho ô hiện tại trong calendar */
+    border: 1px solid #CCCCCC; /* Đổi màu viền cho ô hiện tại */
+  }
+  
+  .react-calendar__tile--weekend {
+    /* Thêm các quy tắc CSS cho các ngày cuối tuần trong calendar */
+    color: #FF0000; /* Đổi màu chữ cho các ngày cuối tuần */
+  }

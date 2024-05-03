@@ -1,0 +1,70 @@
+.buttonStyle  {
+    display: flex;
+    border-radius: 4px;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: #A4CFD3;
+  }
+  
+  .containerStyle  {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 6px;
+    background-color: #EEEEEE;
+    height: 170px;
+    margin-left: 100px;
+  }
+  
+  .avatarStyle {
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+  
+  .postTextStyle {
+    width: 350px;
+    margin-right: 10px;
+  }
+  
+  .inforTextStyle {
+    width: 200px;
+    margin-right: 10px;
+    margin-top: 10px;
+    height: 25px;
+    background-color: #EEEEEE;
+    border-radius: 6px;
+    border: none;
+  }
+  
+  .smallButtonStyle {
+    margin-left: 15px;
+    margin-right: 10px;
+    border-radius: 10px;
+  }
+  
+  .postButtonStyle {
+    margin-top: 20px;
+    margin-left: 70px;
+    width: 350px;
+  }
+  
+  .rightContainerStyle {
+    padding: 20px;
+    margin-bottom: 10px;
+    height: auto;
+  }
+
+  .underline{
+    width: 61px;
+    height: 6px;
+    background: #080f0f;
+    border-radius: 9px;
+}
+
+  

@@ -1,0 +1,30 @@
+/* src/ChatList.css */
+.chat-list-container {
+  width: 100%;
+}
+
+.chat-list-header {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  /* border-bottom: 1px solid #e0e0e0; */
+}
+
+.chat-list-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.chat-search-input {
+  margin-top: 10px;
+  padding: 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+}
+
+.chat-list {
+  max-height: calc(100vh - 70px); /* Adjust height to account for header */
+  overflow-y: auto;
+  /* border-right: 1px solid #e0e0e0; */
+}

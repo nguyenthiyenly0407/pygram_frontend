@@ -67,4 +67,10 @@
     border-radius: 9px;
 }
 
+.textTitle {
+  font-family: "Dancing Script";
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+} 
   

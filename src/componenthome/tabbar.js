@@ -14,13 +14,14 @@ import Blacklogout from './image/blacklogout.png';
 import Webfont from 'webfontloader'
 import { Redirect } from 'react-router-dom';
 
-const TabBar = ({ setActivePage }) => {
+const TabBar = ({ setActivePage,activePage }) => {
    
     const [activeButton, setActiveButton] = useState("Home");
     
 
 
     useEffect(() => {
+        setActiveButton(activePage);
         Webfont.load({
             google: {
                 families: ['Dancing Script', 'Roboto'] 
@@ -47,8 +48,21 @@ const TabBar = ({ setActivePage }) => {
     };
 
     const handleButtonClick = (buttonName) => {
+        localStorage.removeItem("conversationId");
+        localStorage.removeItem("conversationName");
+        if(buttonName === "Home") {
+            const userId = localStorage.getItem('userIdhaha');
+            window.location.href = `/home/${userId}`;
+        }
+        if(buttonName === "Message") {
+             // Lấy userId từ localStorage
+            const userId = localStorage.getItem('userIdhaha');
+            // Chuyển hướng đến trang notification với userId
+            window.location.href = `/message/${userId}`;
+        }
         setActivePage(buttonName); // Gửi buttonName lên cho Home
         setActiveButton(buttonName);
+        
         
     };
     
@@ -57,10 +71,13 @@ const TabBar = ({ setActivePage }) => {
     };
     return (
         
-        <div style={{ position: 'fixed', backgroundColor: '#FFFFFF', width: '23%', height: '100vh', padding: '10px', display: 'flex', flexDirection: 'column', backgroundImage: 'linear-gradient(to right, transparent, #EEEEEE, transparent)' }}>
+        <div style={{ position: 'fixed', backgroundColor: '#FFFFFF', width: '15%', height: '100vh', padding: '10px', display: 'flex', flexDirection: 'column', }}>
             
             <div style={{}}>
             </div>
+            <div className='ms-5 mt-2'>
+        <p style={{fontFamily: 'Dancing Script',fontOpticalSizing: 'auto', fontWeight: '700px', fontStyle: 'normal', fontSize: '30px'}}>PyGram</p>
+      </div>
             <ButtonWithIcon 
                 icon={activeButton === "Home" ? Blackhome : Whitehome} 
                 text="Home"

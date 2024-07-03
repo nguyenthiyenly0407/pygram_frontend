@@ -6,6 +6,7 @@ import Home from './home';
 import Course from './componenthome/course';
 import user from './componenthome/user';
 import Notification from './componenthome/Notification';
+import Message from './componenthome/Message';
 function App() {
   return (
     <BrowserRouter>
@@ -14,6 +15,7 @@ function App() {
         <Route path='/signup' exact component={Signup}></Route>
         <Route path='/home/:userId' exact component={Home}></Route>
         <Route path='/notification/:userId' component={Notification} />
+        <Route path='/message/:userId' component={Message} />
         <Route path='/course' exact component={Course}></Route>
         <Route path='/search' exact component={user}></Route>
       </Switch>

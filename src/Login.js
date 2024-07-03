@@ -28,18 +28,14 @@ function Login() {
         setErrors(Validation(values));
         try {
             const res = await Axios.post('http://localhost:5000/api/login', values);
-            if (res.data.message === 'Success') {
-                setIsSubmitted(true);
-                setUserId(res.data.userId);
-                setuserName(res.data.userName);
+            setIsSubmitted(true);
+                setUserId(res.data.user.id);
+                setuserName(res.data.user.name);
                 localStorage.setItem('token', res.data.token);
-                localStorage.setItem('userId', res.data.userId);
-                localStorage.setItem('loggedInUserjj', res.data.userName);
+                localStorage.setItem('userId', res.data.user.id);
+                localStorage.setItem('loggedInUserjj', res.data.user.name);
                 const newUser = { id: res.data.userId, name: res.data.userName };
                 socket.emit('userLoggedIn', newUser); // Gửi thông điệp về server
-            } else {
-                alert("No user exists!");
-            }
         } catch (error) {
             console.log(error);
         }

@@ -1,0 +1,36 @@
+.split-screen {
+    display: flex;
+    height: 100vh;
+}
+
+.left-panel {
+    flex: 1;
+    padding: 20px;
+    border-right: 1px solid #ccc;
+    overflow-y: auto;
+}
+
+.right-panel {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+/* Ensure the split screen layout is responsive */
+@media (max-width: 768px) {
+    .split-screen {
+        flex-direction: column;
+    }
+    .left-panel, .right-panel {
+        border-right: none;
+        border-bottom: 1px solid #ccc;
+    }
+}
+
+/* Styling for buttons and inputs */
+input[type="file"] {
+    margin-bottom: 10px;
+}
+
+button {
+    margin: 5px;
+}

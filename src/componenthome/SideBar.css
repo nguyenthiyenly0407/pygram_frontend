@@ -1,0 +1,35 @@
+/* Sidebar.css */
+.sidebar {
+    width: 25%;
+    background-color: #f0f2f5;
+    overflow-y: scroll;
+    padding: 20px;
+  }
+  
+  .user-details {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .user-details img {
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .conversation {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .conversation img {
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .conversation:hover {
+    background-color: #e6e6e6;
+  }
+  

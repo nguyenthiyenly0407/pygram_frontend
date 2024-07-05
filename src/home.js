@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import TabBar from './componenthome/tabbar';
 import { Redirect } from 'react-router-dom';
 import Notification from './componenthome/Notification';
-import Message from './componenthome/Message';
 import Setting from './componenthome/setting';
 import Searchbutton from './componenthome/image/search.png';
 import avatar from './componenthome/image/avata.png';
@@ -14,7 +13,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import calendar from './calendar.css';
 import Axios from 'axios';
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 function Home() {
   const [activePage, setActivePage] = useState('Home');
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -28,8 +27,7 @@ function Home() {
   const [comments, setComments] = useState({});
   const [lastPostedContentId, setLastPostedContentId] = useState(null);
   const [lastPostedContent, setLastPostedContent] = useState([]);
-  const [loggedInUsers, setLoggedInUsers] = useState([]);
- 
+  const [socket, setSocket] = useState(null);
   const onChange = newDate => {
     setDate(newDate);
   };
@@ -37,29 +35,6 @@ function Home() {
   const handleSearchChange = event => {
     setSearchText(event.target.value);
   };
-
-
- const handleSearchClick = async () => {
-  if (searchText.trim() !== '') {
-    try {
-      const apiUrl = `http://localhost:5000/api/search?query=${searchText}`;
-      const response = await Axios.get(apiUrl);
-      const searchResults = response.data.results;
-
-      if (searchResults && searchResults.length > 0) {
-        // Lấy tên người dùng từ kết quả tìm kiếm đầu tiên
-        const userName = searchResults[0].name;
-        
-        // Chuyển hướng đến trang /search và truyền tên người dùng qua query parameter
-        window.location.href = `/search?name=${encodeURIComponent(userName)}`; // Sửa lỗi ở đây
-      } else {
-        console.log('No search results found');
-      }
-    } catch (error) {
-      console.error('Error searching:', error);
-    }
-  }
-};
 
   const handleAvatarChange = async e => {
     // Xử lý thay đổi avata
@@ -110,33 +85,14 @@ function Home() {
       console.error('Error posting comment:', error);
     }
   };
+ 
   useEffect(() => {
-    const socket = io('http://localhost:3000');
-  
-    // Listen for the 'userLoggedIn' event from the server
-    socket.on('userLoggedIn', newUser => {
-        setLoggedInUsers(prevUsers => [...prevUsers, newUser]);
-        console.log("user logged in:", newUser);
-    });
-  
-    return () => {
-        socket.disconnect();
-    };
+    const newSocket = io('http://localhost:5000'); 
+    setSocket(newSocket);
+
+    return () => newSocket.close();
 }, []);
 
-// Rendering list of logged-in users
-useEffect(() => {
-    const loggedInUsersFromStorage = localStorage.getItem('loggedInUsers');
-    if (loggedInUsersFromStorage) {
-        setLoggedInUsers(JSON.parse(loggedInUsersFromStorage));
-    }
-}, []);
-  
-  
-  // Rendering list of logged-in users
-  
-  
-  
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem('token');
@@ -154,7 +110,6 @@ useEffect(() => {
           setUserData(res.data.user);
           const userId = res.data.user.id;
           localStorage.setItem('userIdhaha',userId)       
-          setLoggedInUsers(prevUsers => [...prevUsers, userData]);
           console.log("useridhaha",userId)
         } else {
           console.log('Error: Unable to fetch user information');
@@ -166,6 +121,7 @@ useEffect(() => {
 
     fetchData();
   }, []);
+  
 
   const handleContentChange = (postId, newContent) => {
     setPostedContents(prevState => ({
@@ -263,7 +219,7 @@ useEffect(() => {
             </div>
 
             <div>
-              <button style={{ backgroundColor: '#ccc', border: 'none', padding: '5px' }} onClick={handleSearchClick}>
+              <button style={{ backgroundColor: '#ccc', border: 'none', padding: '5px' }}>
                 <img src={Searchbutton} alt="Search" style={{ width: '25px', height: '25px' }} />
               </button>
             </div>
@@ -400,16 +356,17 @@ useEffect(() => {
                 />
                 </div>
                 <div style={rightContainerStyle}>
-                                <span> List users</span>
-                                <ul>
-                                 {loggedInUsers.name}
-                                </ul>
-                            </div>
+  <span> List users</span>
+  <ul>
+    {userData.name}
+  </ul>
+</div>
+
                      </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
   );
 }
 

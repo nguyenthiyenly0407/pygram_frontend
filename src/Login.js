@@ -1,14 +1,11 @@
+// src/components/Login.js
 import React, { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import Validation from './LoginValidation';
-import './Login.css';
 import Axios from 'axios';
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
+import './Login.css';
 
-// Khởi tạo socket ở ngoài hàm Login
-const socket = io('http://localhost:3000');
-
-function Login() {
+function Login({ isSignInPage = true }) {
     const [values, setValues] = useState({
         email: '',
         password: '',
@@ -17,7 +14,7 @@ function Login() {
     const [errors, setErrors] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [userId, setUserId] = useState(null);
-    const [userName, setuserName] = useState(null);
+    const socket = io('http://localhost:5000');
 
     const handleInput = (event) => {
         setValues({ ...values, [event.target.name]: event.target.value });
@@ -25,23 +22,23 @@ function Login() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        setErrors(Validation(values));
+        setErrors({}); // Clear previous errors
         try {
             const res = await Axios.post('http://localhost:5000/api/login', values);
-            if (res.data.message === 'Success') {
+            if (res.data.token) {
                 setIsSubmitted(true);
-                setUserId(res.data.userId);
-                setuserName(res.data.userName);
+                setUserId(res.data.user.id);
+                const user = { ...res.data.user, major: values.major }; // Ensure major is stored
                 localStorage.setItem('token', res.data.token);
-                localStorage.setItem('userId', res.data.userId);
-                localStorage.setItem('loggedInUserjj', res.data.userName);
-                const newUser = { id: res.data.userId, name: res.data.userName };
-                socket.emit('userLoggedIn', newUser); // Gửi thông điệp về server
-            } else {
-                alert("No user exists!");
+                localStorage.setItem('user', JSON.stringify(user));
+                socket.emit('userLoggedIn', { userId: res.data.user.id, userName: res.data.user.name });
             }
         } catch (error) {
-            console.log(error);
+            if (error.response && error.response.status === 400) {
+                setErrors({ credentials: 'Invalid email or password' });
+            } else {
+                console.error('Error logging in:', error);
+            }
         }
     };
 
@@ -53,6 +50,7 @@ function Login() {
         <div className='container-fluid'>
             <form className="mx-auto" onSubmit={handleSubmit}>
                 <h4 className="text-center">Login</h4>
+                {errors.credentials && <div className='alert alert-danger'>{errors.credentials}</div>}
                 <div className='mb-3 mt-5'>
                     <label htmlFor='email' className="form-label">Email</label>
                     <input
@@ -63,7 +61,6 @@ function Login() {
                         className='form-control'
                         id="exampleInputEmail1"
                     />
-                    {errors.email && <span className='text-danger'>{errors.email}</span>}
                 </div>
                 <div className='mb-3'>
                     <label htmlFor='password' className="form-label">Password</label>
@@ -74,7 +71,6 @@ function Login() {
                         onChange={handleInput}
                         className='form-control'
                     />
-                    {errors.password && <span className='text-danger'>{errors.password}</span>}
                 </div>
                 <div className='mb-3'>
                     <label htmlFor='major' className="form-label">Major</label>
@@ -83,7 +79,7 @@ function Login() {
                         onChange={handleInput}
                         className='form-control rounded-0'
                     >
-                        <option value=''>Major</option>
+                        <option value=''>Select Major</option>
                         <option value='Student'>Student</option>
                         <option value='Teacher'>Teacher</option>
                     </select>

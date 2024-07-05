@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
 
-const socket = io('http://localhost:3000');
 
 function Search({ loggedInUserId }) {
   const [searchResults, setSearchResults] = useState([]);
@@ -24,12 +22,7 @@ function Search({ loggedInUserId }) {
     }
   };
 
-  const sendRequest = (userId) => {
-    socket.emit('sendRequest', { from: loggedInUserId, to: userId });
-    // Cập nhật giao diện khi gửi thành công
-    alert("Request sent successfully!");
-  };
-
+  
   return (
     <div>
       <h1>Search Results</h1>
@@ -38,7 +31,7 @@ function Search({ loggedInUserId }) {
           <li key={index}>
             {result.name}
             {(loggedInUserId !== result.id) ? (
-              <button onClick={() => sendRequest(result.id)}>Send to request</button>
+              <button >Send message</button>
             ) : null}
           </li>
         ))}

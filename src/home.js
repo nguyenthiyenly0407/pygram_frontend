@@ -14,7 +14,6 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import calendar from './calendar.css';
 import Axios from 'axios';
-import io from 'socket.io-client';
 import ImageIcon from './componenthome/icons/image.icon';
 import VideoIcon from './componenthome/icons/video.icon';
 import ActivityIcon from './componenthome/icons/activity.icon';
@@ -22,6 +21,8 @@ import DeleteIcon from './componenthome/icons/delete.icon';
 import LikeIcon from './componenthome/icons/like.icon';
 import CommentIcon from './componenthome/icons/comment.icon';
 import ShareIcon from './componenthome/icons/share.icon';
+import './home.css';
+import { useSocket } from './SocketContext';
 function Home() {
   const [activePage, setActivePage] = useState('Home');
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -37,6 +38,8 @@ function Home() {
   const [lastPostedContent, setLastPostedContent] = useState([]);
   const [loggedInUsers, setLoggedInUsers] = useState([]);
   const [commentsOfPosts, setCommentsOfPosts] = useState([]);
+  const [listUserLogin, setListUserLogin] = useState([]);
+  const {newLoginUser, newLogoutUser, userslogin, getUsersLogin} = useSocket();
 
   const onChange = newDate => {
     setDate(newDate);
@@ -117,20 +120,48 @@ function Home() {
     }
   };
   useEffect(() => {
+    console.log('demo: ',JSON.stringify(localStorage.getItem('userslogin')));
     fetchPostData();
     fetchCommentOfPostData();
-    const socket = io('http://localhost:3000');
-
-    // Listen for the 'userLoggedIn' event from the server
-    socket.on('userLoggedIn', newUser => {
-      setLoggedInUsers(prevUsers => [...prevUsers, newUser]);
-      console.log("user logged in:", newUser);
-    });
-
-    return () => {
-      socket.disconnect();
-    };
   }, []);
+
+  // useEffect(() => { 
+  //   if(newLoginUser !== null && newLoginUser.id !== localStorage.getItem('userId')) {
+  //     setListUserLogin((prevMessages) => [...prevMessages, {
+  //       ...newLoginUser,
+  //       status: 'online'
+  //     }]);
+  //   }
+
+  // }, [newLoginUser]);
+  useEffect(() => {
+ 
+    let data = [];
+    console.log('asasasasasasasasa', userslogin);
+    if(userslogin === null || userslogin.length === 0) {
+      data = JSON.parse(localStorage.getItem('usersLogin'))
+      console.log('data', data);
+      if(data === null || data === ''|| data === '[]') {
+        data=[];
+      }
+      console.log("asasasasasasasasa");
+    }else {
+      console.log("asasasasasasasasa");
+      data = userslogin.filter(item => item.id !== localStorage.getItem('userId'))
+      localStorage.setItem('usersLogin', JSON.stringify(data))
+    }
+    
+    if(newLogoutUser !== null && newLogoutUser !== '') {
+      data = data.filter(item => item.id !== newLogoutUser.id);
+    }
+   
+    setListUserLogin(data.map(item => {
+      return {
+        ...item,
+        status: 'online'
+      }
+    }))
+  }, [userslogin])
 
   // Rendering list of logged-in users
   useEffect(() => {
@@ -214,6 +245,7 @@ function Home() {
         }));
         // Cập nhật giá trị lastPostedContent thành nội dung mới
         setLastPostedContent(postContent);
+        fetchPostData();
         clearPostContent();
       } else {
         console.error('Error posting:', response.data.error);
@@ -230,11 +262,17 @@ function Home() {
       if (res.data.message === 'Success') {
         setPostedContents(res.data.posts); // Sử dụng dữ liệu từ API để cập nhật postedContents
       }
-      console.log("asasassas");
     } catch (error) {
       console.error('Error fetching posts:', error);
     }
   };
+  const formatDate = (date) => {
+    const targetDate = new Date(date);
+
+    // Format target date to the desired format
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return targetDate.toLocaleDateString('en-US', options);
+  } 
   const fetchCommentOfPostData = async () => {
     try {
       const apiUrl = 'http://localhost:5000/api/getcmt';
@@ -345,8 +383,8 @@ function Home() {
                     <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                       <img src={avatarImage} alt="Avatar" style={{ width: '40px', height: '40px' }} />
                       <p style={{ display: 'flex', flexDirection: 'column' }}>
-                        <span style={{ fontSize: '15px', fontWeight: 'bold' }}>Logan</span>
-                        <span style={{ fontSize: '13px' }}>November 16, 2023</span>
+                        <span style={{ fontSize: '15px', fontWeight: 'bold' }}>{postedContent.student_name? postedContent.student_name : postedContent.teacher_name}</span>
+                        <span style={{ fontSize: '13px' }}>{formatDate(postedContent.created_at)}</span>
                       </p>
                     </div>
                     <div type="button" onClick={() => handleDeletePost(postId)}>
@@ -465,10 +503,17 @@ function Home() {
                   style={{ calendar }}
                 />
                 <div>
-                  <span> List users</span>
-                  <ul>
-                    {loggedInUsers.name}
-                  </ul>
+                  {Object.entries(listUserLogin).map(([index, item]) => (
+                    <div className="chat-item">
+                    <div className="avatar">
+                      <img src={avatar} alt="Avatar" />
+                      {item.status === 'online' && <span className="chat-status online"></span>}
+                    </div>
+                    <div className="chat-details">
+                        <span className="chat-name">{item.name}</span>
+                    </div>
+                  </div>
+                  ))}
                 </div>
               </div>
 

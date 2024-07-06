@@ -3,7 +3,10 @@ import './ChatWindow.css';
 import avatar from './image/avata.png';
 import { CommonUtils } from '../CommonUtils';
 import Axios from 'axios';
+import { useSocket } from '../SocketContext';
 const ChatWindow = () => {
+  const { send } = useSocket();
+  const { newMessage } = useSocket();
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
   const handleKeyDown = (event) => {
@@ -25,14 +28,23 @@ const ChatWindow = () => {
     const response = await Axios.post(apiUrl, postData);
     if(response.status === 200) {
       const newMessage = {
+        room: localStorage.getItem('conversationId'),
         message: message,
         sender: "Me",
         isUser: true,
         time: CommonUtils.formatCurrentDate(),
       };
-
+      const conversationId = localStorage.getItem('conversationId');
       setMessages((prevMessages) => [...prevMessages, newMessage]);
+      
       setMessage('');
+      send({
+        room: `${conversationId.split('_')[1]}_${conversationId.split('_')[0]}`,
+        message: message,
+        sender: localStorage.getItem('loggedInUserjj'),
+        isUser: false,
+        time: CommonUtils.formatCurrentDate(),
+      });
     }
   }
   const fetchData = async () => {
@@ -54,6 +66,11 @@ const ChatWindow = () => {
       console.error('Error fetching posts:', error);
     }
   };
+  useEffect(() => {
+    if(newMessage != null && newMessage.room === localStorage.getItem('conversationId')) {
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+    }
+  }, [newMessage]);
   return (
     <div className="chat-window-container">
       <div className="messages-container">

@@ -2,12 +2,15 @@
 import React from 'react';
 import './ChatItem.css';
 import ChatWindow from './ChatWindow';
+import { useSocket } from '../SocketContext';
 
 const ChatItem = ({ avatar, name, message, time, status, conversationId }) => {
+  const { joinRoom } = useSocket();
   const onClick=()=> {
     localStorage.setItem("conversationId", conversationId);
     window.location.href = `/message/${localStorage.getItem('userId')}?conversationId=${conversationId}&conversationName=${name}`;
     localStorage.setItem("conversationName", name);
+    joinRoom(conversationId);
   }
   return (
     <div className="chat-item" onClick={onClick}>
@@ -21,7 +24,7 @@ const ChatItem = ({ avatar, name, message, time, status, conversationId }) => {
         </div>
         <div className="chat-message">
           {message}
-          <span className="chat-time">{time}</span>
+         
         </div>
       </div>
     </div>

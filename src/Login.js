@@ -3,10 +3,8 @@ import { Link, Redirect } from 'react-router-dom';
 import Validation from './LoginValidation';
 import './Login.css';
 import Axios from 'axios';
-import io from 'socket.io-client';
+import { useSocket } from './SocketContext';
 
-// Khởi tạo socket ở ngoài hàm Login
-const socket = io('http://localhost:3000');
 
 function Login() {
     const [values, setValues] = useState({
@@ -18,6 +16,8 @@ function Login() {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [userId, setUserId] = useState(null);
     const [userName, setuserName] = useState(null);
+
+    const {login} = useSocket();
 
     const handleInput = (event) => {
         setValues({ ...values, [event.target.name]: event.target.value });
@@ -35,7 +35,10 @@ function Login() {
                 localStorage.setItem('userId', res.data.user.id);
                 localStorage.setItem('loggedInUserjj', res.data.user.name);
                 const newUser = { id: res.data.userId, name: res.data.userName };
-                socket.emit('userLoggedIn', newUser); // Gửi thông điệp về server
+                login({
+                    name: res.data.user.name,
+                    id: res.data.user.id
+                })
         } catch (error) {
             console.log(error);
         }

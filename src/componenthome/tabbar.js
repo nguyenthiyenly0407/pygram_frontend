@@ -13,10 +13,12 @@ import Whitelogout from './image/whitelogout.png';
 import Blacklogout from './image/blacklogout.png';
 import Webfont from 'webfontloader'
 import { Redirect } from 'react-router-dom';
+import { useSocket } from '../SocketContext';
 
 const TabBar = ({ setActivePage,activePage }) => {
    
     const [activeButton, setActiveButton] = useState("Home");
+    const {logout} = useSocket();
     
 
 
@@ -35,8 +37,10 @@ const TabBar = ({ setActivePage,activePage }) => {
         window.location.href = `/notification/${userId}`;
     };
     const handleLogout = () => {
+        logout();
         window.location.href = '/';
         localStorage.clear();
+       
       };
 
     const handleMouseEnter = (event) => {
@@ -48,6 +52,11 @@ const TabBar = ({ setActivePage,activePage }) => {
     };
 
     const handleButtonClick = (buttonName) => {
+        if(buttonName==='Logout') {
+            window.location.href = `/`;
+            localStorage.clear();
+
+        }
         localStorage.removeItem("conversationId");
         localStorage.removeItem("conversationName");
         if(buttonName === "Home") {
@@ -124,7 +133,7 @@ const TabBar = ({ setActivePage,activePage }) => {
                     icon={activeButton === "Log out" ? Blacklogout : Whitelogout}
                     text="Log out"
                     isActive={activeButton === "Log out"}
-                    onClick={() => handleButtonClick("Log out")}
+                    onClick={() => handleButtonClick("Logout")}
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                 />

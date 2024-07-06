@@ -50,6 +50,7 @@
   align-items: flex-end;
   border-radius: 10px 10px 0 10px;
   text-align: right;
+  width: 20%;
 }
 
 .other-message {

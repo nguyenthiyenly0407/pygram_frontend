@@ -125,14 +125,14 @@ const TabBar = ({ setActivePage }) => {
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
             />
-            <ButtonWithIcon
+            {/* <ButtonWithIcon
                 icon={activeButton === "Notification" ? Blacknoti : Whitenoti}
                 text="Notification"
                 isActive={activeButton === "Notification"}
                 onClick={handleNotificationClick}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
-            />
+            /> */}
             <ButtonWithIcon
                 icon={activeButton === "Message" ? Blackmessage : Whitemessage}
                 text="Message"

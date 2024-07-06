@@ -91,7 +91,7 @@ const TabBar = ({ setActivePage }) => {
     };
 
     const handleSettingClick = () => {
-        handleLogout();
+        history.push('/setting');
     };
 
     const handleCourseBlockClick = (block) => {
@@ -171,7 +171,7 @@ const TabBar = ({ setActivePage }) => {
                     />
                 </div>
             )}
-            <ButtonWithIcon
+           <ButtonWithIcon
                 icon={activeButton === "Setting" ? Blacksetting : Whitesetting}
                 text="Setting"
                 isActive={activeButton === "Setting"}

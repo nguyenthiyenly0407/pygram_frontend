@@ -79,7 +79,7 @@ import user from './componenthome/user';
 import Notification from './componenthome/Notification';
 import Message from './componenthome/Message';
 import { SocketProvider } from './SocketContext';
-
+import Setting from './componenthome/setting';
 
 
 function App() {
@@ -93,6 +93,7 @@ function App() {
           <Route path='/notification/:userId' component={Notification} />
           <Route path='/message/:userId' component={Message} />
           <Route path='/course' exact component={Course}></Route>
+          <Route path='/setting' exact component={Setting}></Route>
           <Route path="/course/grade10/a1" exact component={grade10A1} />
           <Route path="/course/grade10/a2" exact component={grade10A2} />
           <Route path="/course/grade10/a3" exact component={grade10A3} />

@@ -22,9 +22,9 @@ const ShowForm = () => {
     }, [link]);
 
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user && user.id) {
-            setUserId(user.id);
+        const userId = localStorage.getItem('userId');
+        if (userId) {
+            setUserId(userId);
         }
     }, []);
 

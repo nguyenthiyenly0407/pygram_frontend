@@ -1,4 +1,4 @@
-import React, { useState,  useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Whitehome from './image/whitehome.png';
 import Blackhome from './image/blackhome.png';
 import Whitenoti from './image/whitenotification.png';
@@ -15,38 +15,51 @@ import Webfont from 'webfontloader'
 import { Redirect } from 'react-router-dom';
 import { useSocket } from '../SocketContext';
 
-const TabBar = ({ setActivePage,activePage }) => {
-   
-    const [activeButton, setActiveButton] = useState("Home");
-    const {logout} = useSocket();
-    
+import Webfont from 'webfontloader';
+import { useHistory } from 'react-router-dom';
 
+const TabBar = ({ setActivePage }) => {
+    const [activeButton, setActiveButton] = useState("Home");
+    const [showCourses, setShowCourses] = useState(false);
+    const [activeCourse, setActiveCourse] = useState(null);
+    const history = useHistory();
+    const {logout} = useSocket();
 
     useEffect(() => {
         setActiveButton(activePage);
         Webfont.load({
             google: {
-                families: ['Dancing Script', 'Roboto'] 
+                families: ['Dancing Script', 'Roboto']
             }
         });
     }, []);
+
     const handleNotificationClick = () => {
-        // Lấy userId từ localStorage
         const userId = localStorage.getItem('userIdhaha');
-        // Chuyển hướng đến trang notification với userId
         window.location.href = `/notification/${userId}`;
     };
+
+    const handleMessageClick = () => {
+        window.location.href = `/message`;
+    };
+
+    const handleCourseClick = () => {
+        setShowCourses(!showCourses);
+        setActiveCourse(null);
+    };
+
     const handleLogout = () => {
         logout();
         window.location.href = '/';
         localStorage.clear();
-       
-      };
+    };
+
+
 
     const handleMouseEnter = (event) => {
         event.target.style.backgroundColor = '#DDDDDD';
     };
-    
+
     const handleMouseLeave = (event) => {
         event.target.style.backgroundColor = '#FFFFFF';
     };
@@ -73,11 +86,27 @@ const TabBar = ({ setActivePage,activePage }) => {
         setActiveButton(buttonName);
         
         
+
     };
-    
+
     const handleSettingClick = () => {
-        handleLogout(); // Gọi hàm handleLogout khi nhấp vào nút "Setting"
+        handleLogout();
     };
+
+    const handleCourseBlockClick = (block) => {
+        setActiveCourse(block === activeCourse ? null : block);
+    };
+
+    const handleCourseNavigationgrade10 = (course) => {
+        history.push(`/course/grade10/${course.toLowerCase()}`);
+    };
+    const handleCourseNavigationgrade11 = (course) => {
+        history.push(`/course/grade11/${course.toLowerCase()}`);
+    };
+    const handleCourseNavigationgrade12 = (course) => {
+        history.push(`/course/grade12/${course.toLowerCase()}`);
+    };
+
     return (
         
         <div style={{ position: 'fixed', backgroundColor: '#FFFFFF', width: '15%', height: '100vh', padding: '10px', display: 'flex', flexDirection: 'column', }}>
@@ -91,9 +120,9 @@ const TabBar = ({ setActivePage,activePage }) => {
                 icon={activeButton === "Home" ? Blackhome : Whitehome} 
                 text="Home"
                 isActive={activeButton === "Home"}
-                onClick={() => handleButtonClick("Home")} 
-                onMouseEnter={handleMouseEnter} 
-                onMouseLeave={handleMouseLeave} 
+                onClick={() => handleButtonClick("Home")}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
             />
             <ButtonWithIcon
                 icon={activeButton === "Notification" ? Blacknoti : Whitenoti}
@@ -107,19 +136,40 @@ const TabBar = ({ setActivePage,activePage }) => {
                 icon={activeButton === "Message" ? Blackmessage : Whitemessage}
                 text="Message"
                 isActive={activeButton === "Message"}
-                onClick={() => handleButtonClick("Message")}
+                onClick={handleMessageClick}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
             />
-            
             <ButtonWithIcon
                 icon={activeButton === "Course" ? Blackcourse : Whitecourse}
                 text="Course"
                 isActive={activeButton === "Course"}
-                onClick={() => handleButtonClick("Course")}
+                onClick={handleCourseClick}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
             />
+            {showCourses && (
+                <div style={{ display: 'flex', flexDirection: 'column', paddingLeft: '20px' }}>
+                    <CourseBlock
+                        title="Khối 10"
+                        activeCourse={activeCourse}
+                        onClick={() => handleCourseBlockClick("Khối 10")}
+                        handleCourseNavigation={handleCourseNavigationgrade10}
+                    />
+                    <CourseBlock
+                        title="Khối 11"
+                        activeCourse={activeCourse}
+                        onClick={() => handleCourseBlockClick("Khối 11")}
+                        handleCourseNavigation={handleCourseNavigationgrade11}
+                    />
+                    <CourseBlock
+                        title="Khối 12"
+                        activeCourse={activeCourse}
+                        onClick={() => handleCourseBlockClick("Khối 12")}
+                        handleCourseNavigation={handleCourseNavigationgrade12}
+                    />
+                </div>
+            )}
             <ButtonWithIcon
                 icon={activeButton === "Setting" ? Blacksetting : Whitesetting}
                 text="Setting"
@@ -142,8 +192,26 @@ const TabBar = ({ setActivePage,activePage }) => {
         </div>
     );
 };
+
+const CourseBlock = ({ title, activeCourse, onClick, handleCourseNavigation }) => (
+    <div style={{ marginBottom: '10px' }}>
+        <button onClick={onClick} style={{ ...courseBlockStyle, fontWeight: activeCourse === title ? 'bold' : 'normal' }}>
+            {title}
+        </button>
+        {activeCourse === title && (
+            <div style={{ display: 'flex', flexDirection: 'row', paddingLeft: '20px', marginTop: '10px' }}>
+                {['A1', 'A2', 'A3'].map(course => (
+                    <button key={course} style={courseButtonStyle} onClick={() => handleCourseNavigation(course)}>
+                        {course}
+                    </button>
+                ))}
+            </div>
+        )}
+    </div>
+);
+
 const ButtonWithIcon = ({ icon, text, onClick, onMouseEnter, onMouseLeave, isActive }) => (
-    <button style={{...buttonStyle, fontWeight: isActive ? 'bold' : 'normal'}} onClick={onClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+    <button style={{ ...buttonStyle, fontWeight: isActive ? 'bold' : 'normal' }} onClick={onClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
         <img src={icon} alt={text} style={{ width: '22px', height: '22px', marginRight: '8px' }} />
         {text}
     </button>
@@ -153,7 +221,7 @@ const buttonStyle = {
     display: 'flex',
     alignItems: 'center',
     width: '100%',
-    height:"7%",
+    height: "7%",
     padding: '8px 12px',
     margin: '4px 0',
     backgroundColor: '#FFFFFF',
@@ -161,6 +229,26 @@ const buttonStyle = {
     borderRadius: '4px',
     cursor: 'pointer',
     outline: 'none',
+};
+
+const courseBlockStyle = {
+    padding: '8px 12px',
+    backgroundColor: '#F0F0F0',
+    border: '1px solid #CCCCCC',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    width: '100%',
+    textAlign: 'left',
+    marginBottom: '5px',
+};
+
+const courseButtonStyle = {
+    padding: '8px 12px',
+    backgroundColor: '#F0F0F0',
+    border: '1px solid #CCCCCC',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    marginBottom: '5px',
 };
 
 export default TabBar;

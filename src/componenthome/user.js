@@ -20,11 +20,10 @@ function Search({ loggedInUserId }) {
       console.error('Error performing search:', error);
     }
   };
-
   const sendRequest = (userId) => {
     alert("Request sent successfully!");
   };
-
+nyenly
   return (
     <div>
       <h1>Search Results</h1>
@@ -33,7 +32,7 @@ function Search({ loggedInUserId }) {
           <li key={index}>
             {result.name}
             {(loggedInUserId !== result.id) ? (
-              <button onClick={() => sendRequest(result.id)}>Send to request</button>
+              <button >Send message</button>
             ) : null}
           </li>
         ))}

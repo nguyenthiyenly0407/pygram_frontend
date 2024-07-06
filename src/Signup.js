@@ -161,8 +161,8 @@ function Signup() {
                                 </select> 
                             </div>
                             <div className="me-2"style={{ flex: '1' }}>
-                            <label htmlFor='classname'>Class</label>
-                                <select name='class' onChange={handleInput} className='form-control rounded-0'>
+                            <label htmlFor='tenlop'>Class</label>
+                                <select name='tenlop' onChange={handleInput} className='form-control rounded-0'>
                                     <option value=''>Class</option>
                                     <option value='A1'>A1</option>
                                     <option value='A2'>A2</option>

@@ -12,7 +12,7 @@ const ShowForm = () => {
     useEffect(() => {
         const fetchQuiz = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/quizzes/${link}`);
+                const response = await axios.get(`https://pygram-backend.onrender.com/quizzes/${link}`);
                 setQuiz(response.data);
             } catch (error) {
                 console.error('Error fetching quiz:', error);
@@ -37,7 +37,7 @@ const ShowForm = () => {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post('http://localhost:5000/submitquiz', {
+            const response = await axios.post('https://pygram-backend.onrender.com/submitquiz', {
                 userId,
                 quizId: quiz.id,
                 answers: selectedAnswers,

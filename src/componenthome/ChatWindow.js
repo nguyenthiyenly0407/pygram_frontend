@@ -19,7 +19,7 @@ const ChatWindow = () => {
   }, []);
 
   const sendMessage = async (message) => {
-    const apiUrl = 'http://localhost:5000/api/message';
+    const apiUrl = 'https://pygram-backend.onrender.com/api/message';
     const postData = {
       conversationId: localStorage.getItem('conversationId'),
       message,
@@ -49,7 +49,7 @@ const ChatWindow = () => {
   }
   const fetchData = async () => {
     try {
-      const apiUrl = 'http://localhost:5000/api/message/' + localStorage.getItem('conversationId');
+      const apiUrl = 'https://pygram-backend.onrender.com/api/message/' + localStorage.getItem('conversationId');
       const res = await Axios.get(apiUrl);
       if (res.status === 200) {
         setMessages(res.data.map(item => {

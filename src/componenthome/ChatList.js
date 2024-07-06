@@ -14,7 +14,7 @@ const ChatList = () => {
   );
   const fetchData = async () => {
     try {
-      const apiUrl = 'http://localhost:5000/api/conversations/'+ localStorage.getItem('userId');
+      const apiUrl = 'https://pygram-backend.onrender.com/api/conversations/'+ localStorage.getItem('userId');
       const res = await Axios.get(apiUrl);
 
         setData(res.data.map(item => {

@@ -15,7 +15,6 @@ import Webfont from 'webfontloader'
 import { Redirect } from 'react-router-dom';
 import { useSocket } from '../SocketContext';
 
-import Webfont from 'webfontloader';
 import { useHistory } from 'react-router-dom';
 
 const TabBar = ({ setActivePage }) => {
@@ -26,7 +25,7 @@ const TabBar = ({ setActivePage }) => {
     const {logout} = useSocket();
 
     useEffect(() => {
-        setActiveButton(activePage);
+        // setActiveButton(activeButton);
         Webfont.load({
             google: {
                 families: ['Dancing Script', 'Roboto']
@@ -40,7 +39,12 @@ const TabBar = ({ setActivePage }) => {
     };
 
     const handleMessageClick = () => {
-        window.location.href = `/message`;
+        // Lấy userId từ localStorage
+        const userId = localStorage.getItem('userIdhaha');
+        // Chuyển hướng đến trang notification với userId
+        window.location.href = `/message/${userId}`;
+        setActiveButton("Message")
+        setActivePage("Message")
     };
 
     const handleCourseClick = () => {
@@ -84,9 +88,6 @@ const TabBar = ({ setActivePage }) => {
         }
         setActivePage(buttonName); // Gửi buttonName lên cho Home
         setActiveButton(buttonName);
-        
-        
-
     };
 
     const handleSettingClick = () => {

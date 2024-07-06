@@ -13,7 +13,7 @@ function Search({ loggedInUserId }) {
 
   const performSearch = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/search?query=${userName}`);
+      const response = await fetch(`https://pygram-backend.onrender.com/api/search?query=${userName}`);
       const data = await response.json();
       setSearchResults(data.results);
     } catch (error) {
@@ -23,7 +23,6 @@ function Search({ loggedInUserId }) {
   const sendRequest = (userId) => {
     alert("Request sent successfully!");
   };
-nyenly
   return (
     <div>
       <h1>Search Results</h1>

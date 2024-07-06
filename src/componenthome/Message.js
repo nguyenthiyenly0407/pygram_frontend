@@ -27,4 +27,4 @@ const Message = () => {
     );
 }
 
-export default Dashboard;
+export default Message;

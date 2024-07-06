@@ -34,7 +34,7 @@ function Signup() {
         setErrors(Validation(values));
         if(Object.keys(errors).length===0){
         try {
-            const res = await Axios.post('http://localhost:5000/api/signup', {
+            const res = await Axios.post('https://pygram-backend.onrender.com/api/signup', {
                 ...values,
                 birthday: `${values.year}-${values.month.length < 2 ? `0${values.month}`: values.month}-${values.day.length < 2 ? `0${values.day}`: values.day}`
             });

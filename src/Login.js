@@ -14,7 +14,7 @@ function Login() {
     const [errors, setErrors] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [userId, setUserId] = useState(null);
-    const socket = io('http://localhost:5000');
+    const [userName, setuserName] = useState(null);
 
     const {login} = useSocket();
 
@@ -26,7 +26,7 @@ function Login() {
         event.preventDefault();
         setErrors({}); // Clear previous errors
         try {
-            const res = await Axios.post('http://localhost:5000/api/login', values);
+            const res = await Axios.post('https://pygram-backend.onrender.com/api/login', values);
             setIsSubmitted(true);
                 setUserId(res.data.user.id);
                 setuserName(res.data.user.name);

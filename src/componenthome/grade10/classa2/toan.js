@@ -38,7 +38,7 @@ const Toan = () => {
         formData.append('file', selectedFile);
 
         try {
-            const response = await axios.post('http://localhost:5000/upload', formData, {
+            const response = await axios.post('https://pygram-backend.onrender.com/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -52,7 +52,7 @@ const Toan = () => {
 
     const fetchFiles = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/files');
+            const response = await axios.get('https://pygram-backend.onrender.com/files');
             setUploadedFiles(response.data);
         } catch (error) {
             console.error('Error fetching files:', error);
@@ -62,7 +62,7 @@ const Toan = () => {
     const handleFileDelete = async (filename) => {
         try {
             const encodedFilename = encodeURIComponent(filename);
-            await axios.delete(`http://localhost:5000/delete/${encodedFilename}`);
+            await axios.delete(`https://pygram-backend.onrender.com/delete/${encodedFilename}`);
             fetchFiles();
         } catch (error) {
             console.error('Error deleting file:', error);
@@ -73,7 +73,7 @@ const Toan = () => {
         try {
             const encodedFilename = encodeURIComponent(filename);
             const response = await axios({
-                url: `http://localhost:5000/download/${encodedFilename}`,
+                url: `https://pygram-backend.onrender.com/download/${encodedFilename}`,
                 method: 'GET',
                 responseType: 'blob',
             });
@@ -113,7 +113,7 @@ const Toan = () => {
         setQuestions(updatedQuestions);
 
         try {
-            const postResponse = await axios.post('http://localhost:5000/quizzes', {
+            const postResponse = await axios.post('https://pygram-backend.onrender.com/quizzes', {
                 title: title.trim(),
                 questions: updatedQuestions,
             });
@@ -128,7 +128,7 @@ const Toan = () => {
                 // Lưu link xuống cơ sở dữ liệu (ví dụ: bạn cần gửi yêu cầu POST để lưu link xuống server)
 
                 // Sau đó, fetch lại danh sách các bài quiz để cập nhật giao diện
-                const getResponse = await axios.get('http://localhost:5000/quizzes');
+                const getResponse = await axios.get('https://pygram-backend.onrender.com/quizzes');
                 setQuizzes(getResponse.data);
                 window.location.reload();
             } else {
@@ -141,7 +141,7 @@ const Toan = () => {
 
     const fetchAllQuizzes = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/quizzes');
+            const response = await axios.get('https://pygram-backend.onrender.com/quizzes');
             setQuizzes(response.data);
         } catch (error) {
             console.error('Error fetching quizzes:', error);
@@ -172,7 +172,7 @@ const Toan = () => {
     const handleDownloadScores = async (quizId) => {
         try {
           const response = await axios({
-            url: `http://localhost:5000/downloadscores/${quizId}`,
+            url: `https://pygram-backend.onrender.com/downloadscores/${quizId}`,
             method: 'GET',
             responseType: 'blob', // Important to handle binary data
           });

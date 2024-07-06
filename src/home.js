@@ -53,7 +53,7 @@ function Home() {
   const handleSearchClick = async () => {
     if (searchText.trim() !== '') {
       try {
-        const apiUrl = `http://localhost:5000/api/search?query=${searchText}`;
+        const apiUrl = `https://pygram-backend.onrender.com/api/search?query=${searchText}`;
         const response = await Axios.get(apiUrl);
         const searchResults = response.data.results;
 
@@ -87,7 +87,7 @@ function Home() {
 
   const handleCommentPost = async (postId, commentContent) => {
     try {
-      const apiUrl = 'http://localhost:5000/api/cmtstudent';
+      const apiUrl = 'https://pygram-backend.onrender.com/api/cmtstudent';
       const commenterId = localStorage.getItem('userId');
 
       const postData = {
@@ -186,7 +186,7 @@ function Home() {
       }
 
       try {
-        const res = await Axios.get(`http://localhost:5000/api/user/${localStorage.getItem('userId')}`, {
+        const res = await Axios.get(`https://pygram-backend.onrender.com/api/user/${localStorage.getItem('userId')}`, {
           headers: { Authorization: 'Bearer ' + token },
         });
         if (res.data.message === "Success") {
@@ -226,7 +226,7 @@ function Home() {
         console.error('Post content is empty');
         return;
       }
-      const apiUrl = 'http://localhost:5000/api/poststatus';
+      const apiUrl = 'https://pygram-backend.onrender.com/api/poststatus';
       const postData = {
         poster_id: localStorage.getItem('userId'),
         content: postContent
@@ -257,7 +257,7 @@ function Home() {
 
   const fetchPostData = async () => {
     try {
-      const apiUrl = 'http://localhost:5000/api/getpoststatus';
+      const apiUrl = 'https://pygram-backend.onrender.com/api/getpoststatus';
       const res = await Axios.get(apiUrl);
       if (res.data.message === 'Success') {
         setPostedContents(res.data.posts); // Sử dụng dữ liệu từ API để cập nhật postedContents
@@ -275,7 +275,7 @@ function Home() {
   } 
   const fetchCommentOfPostData = async () => {
     try {
-      const apiUrl = 'http://localhost:5000/api/getcmt';
+      const apiUrl = 'https://pygram-backend.onrender.com/api/getcmt';
       const res = await Axios.get(apiUrl);
       if (res.status === 200) {
         setCommentsOfPosts(res.data);
